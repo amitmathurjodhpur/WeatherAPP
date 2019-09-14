@@ -23,7 +23,7 @@ class AppUtilities {
     }
     
     internal func getWindDirection(fromDegrees degrees: Float) -> String {
-        var directions =  ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"]
+        let directions =  ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"]
         let i = Int((degrees + 11.25) / 22.5)
         return directions[i % 16]
     }
@@ -31,7 +31,7 @@ class AppUtilities {
    
     
     internal func showStandardDialogOKEvent(viewController: UIViewController, title: String, message: String, event: @escaping() -> ()) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
+        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action: UIAlertAction!) in
             event()
         }))
@@ -70,25 +70,14 @@ class AppUtilities {
     }
     
     internal func setBlurEffect(view: UIView) {
-        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.dark)
+        let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.dark)
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
         blurEffectView.frame = view.bounds
         blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         view.addSubview(blurEffectView)
     }
     
-    internal func getXibByIdentifier(xibName: String, classOwner: Any?, identifier: String) -> Any {
-        let allViewsInXibArray = Bundle.main.loadNibNamed(xibName, owner: classOwner, options: nil)
-        var result: Any!
-        for xib in allViewsInXibArray! {
-            if (xib as! UIView).accessibilityIdentifier == identifier {
-                result = xib
-            }
-        }
-        return result
-    }
-    
-    internal func getViewXBy(label: String, fromViews: [UIView]) -> UIView {
+   internal func getViewXBy(label: String, fromViews: [UIView]) -> UIView {
         var resultView: UIView!
         for view in fromViews {
             if view.accessibilityLabel == label {
@@ -99,9 +88,9 @@ class AppUtilities {
     }
     
     internal func addChildViewController(parentVC: UIViewController, containerView: UIView, childVC: UIViewController) {
-        parentVC.addChildViewController(childVC)
+        parentVC.addChild(childVC)
         containerView.addSubview(childVC.view)
-        childVC.didMove(toParentViewController: parentVC)
+        childVC.didMove(toParent: parentVC)
     }
     
     internal func launchXIB(window: UIWindow, viewController: UIViewController) {
@@ -129,7 +118,7 @@ class AppUtilities {
         videoPlayer.play()
         NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: videoPlayer.currentItem, queue: nil, using: { (_) in
             DispatchQueue.main.async {
-                videoPlayer.seek(to: kCMTimeZero)
+                videoPlayer.seek(to: CMTime.zero)
                 videoPlayer.play()
             }
         })
@@ -138,7 +127,7 @@ class AppUtilities {
     internal func changeVideoBackground(view: UIView, videoType: AssetManager.WEATHER_VIDEO) -> AVPlayer {
         let urlVideo = getLocalFileDirectory(fileName: videoType.rawValue)
         let videoPlayer = AVPlayer(url: urlVideo)
-        videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEnd.none
+        videoPlayer.actionAtItemEnd = AVPlayer.ActionAtItemEnd.none
         if let layers = view.layer.sublayers {
             let avLayer = layers.first as! AVPlayerLayer
             avLayer.player = videoPlayer
@@ -152,7 +141,7 @@ class AppUtilities {
     internal func setVideoUIView(view: UIView, videoType: AssetManager.WEATHER_VIDEO) -> AVPlayer {
         let urlVideo = getLocalFileDirectory(fileName: videoType.rawValue)
         let videoPlayer = AVPlayer(url: urlVideo)
-        videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEnd.none
+        videoPlayer.actionAtItemEnd = AVPlayer.ActionAtItemEnd.none
         
         let videoLayer: AVPlayerLayer = AVPlayerLayer(player: videoPlayer)
         videoLayer.frame = CGRect(x: view.bounds.minX, y: view.bounds.minY, width: view.bounds.width, height: getHeightScreen())
@@ -195,7 +184,7 @@ class AppUtilities {
     }
     
     internal func blurView(view: UIView) {
-        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
+        let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.light)
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
         blurEffectView.frame = view.bounds
         blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]

@@ -17,7 +17,7 @@ class CityWeatherDetailsVC: UIViewController {
 
     fileprivate var player: AVPlayer!
     fileprivate var assetManager: AssetManager!
-    @IBOutlet weak var lblWeatherDescription: UILabel!
+    @IBOutlet weak var lblWeatherDescription: UITextView!
     @IBOutlet weak var imgDayIcon: UIImageView!
 
     
@@ -36,6 +36,9 @@ class CityWeatherDetailsVC: UIViewController {
             case .Success(let conditions):
                 var strWeatherInfo = String()
                 imgDayIcon.sd_setImage(with: URL(string: "http://openweathermap.org/img/w/\(conditions.imagName).png"), placeholderImage: UIImage(named: ""))
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {
+                    self.configureImage()
+                })
                 let formattedMinTemperature = String(format: "%.2f", conditions.Mintemperature)
                 let formattedMaxTemperature = String(format: "%.2f", conditions.Maxtemperature)
                 strWeatherInfo = strWeatherInfo.appending("Current Weather summary: \(conditions.generalDescription)")
@@ -53,7 +56,21 @@ class CityWeatherDetailsVC: UIViewController {
 //            self.startVideoBackground(weatherVideo: self.assetManager.getWeatherCondition(weather: strWeatherDescription, hour: Int(appUtilities.getHour(timeInterval: dt))!))
         }
     }
-
+    
+    func configureImage() {
+        if let containerView = self.view, let image = imgDayIcon.image {
+             let ratio = image.size.width / image.size.height
+            if containerView.frame.size.width > containerView.frame.size.height {
+                 let newHeight = containerView.frame.width / ratio
+                 imgDayIcon.frame.size = CGSize(width: containerView.frame.width, height: newHeight)
+             }
+             else{
+                 let newWidth = containerView.frame.height * ratio
+                 imgDayIcon.frame.size = CGSize(width: newWidth, height: containerView.frame.height)
+             }
+         }
+    }
+    
     @IBAction func btnCancelAction() {
         self.dismiss(animated: true, completion: nil)
     }
@@ -71,7 +88,7 @@ class CityWeatherDetailsVC: UIViewController {
                 self.player = appUtilities.setVideoUIView(view: self.view, videoType: weatherVideo)
             })
             appUtilities.videoAlwaysPlay(videoPlayer: self.player)
-            NotificationCenter.default.addObserver(self, selector: #selector(self.viewDidBecomeActive), name: .UIApplicationDidBecomeActive, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(self.viewDidBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
         }
     }
 

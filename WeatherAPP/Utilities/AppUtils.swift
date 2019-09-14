@@ -10,8 +10,8 @@ import Foundation
 import UIKit
 
 func App_showAlertwithTitle(withMessage message:String,withTitle:String, inView viewC : UIViewController) {
-    let alert = UIAlertController(title: withTitle, message: message, preferredStyle: UIAlertControllerStyle.alert)
-    let action = UIAlertAction(title: "OK", style: UIAlertActionStyle.cancel, handler: nil)
+    let alert = UIAlertController(title: withTitle, message: message, preferredStyle: UIAlertController.Style.alert)
+    let action = UIAlertAction(title: "OK", style: UIAlertAction.Style.cancel, handler: nil)
     alert.addAction(action)
     viewC.present(alert, animated: true, completion: nil)
 }
@@ -32,11 +32,11 @@ func showProgress(inView view: UIView?) {
             frame = CGRect(x: 0, y: 0, width: MainScreen.width, height: MainScreen.height)
         }
         progressView = UIView(frame: frame)
-        progressView!.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+        progressView!.backgroundColor = UIColor.black.withAlphaComponent(0.3)
         
         let activity = UIActivityIndicatorView()
         activity.center = CGPoint(x: frame.size.width/2, y: frame.size.height/2)
-        activity.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.whiteLarge
+        activity.style = UIActivityIndicatorView.Style.whiteLarge
         activity.startAnimating()
         progressView!.addSubview(activity)
         

@@ -19,7 +19,7 @@ class HomeTVC: UITableViewController {
         appDelegate.arrCityPlaceID.add("Philadelphia")
         self.title = "Weather"
         self.tblWeather.estimatedRowHeight = 200
-        self.tblWeather.rowHeight = UITableViewAutomaticDimension
+        self.tblWeather.rowHeight = UITableView.automaticDimension
         showProgress(inView: self.view)
         results.removeAll()
         self.getWeather()
@@ -101,13 +101,15 @@ extension HomeTVC {
             cell.lblDescription.text = "\(conditions.generalDescription)"
             cell.imgDayIcon.sd_setImage(with: URL(string: "http://openweathermap.org/img/w/\(conditions.imagName).png"), placeholderImage: UIImage(named: ""))
         }
+        cell.selectionStyle = .none
         return cell
     }
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableViewAutomaticDimension
+        return UITableView.automaticDimension
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         self.collapseDetailViewController = false
     }
     
